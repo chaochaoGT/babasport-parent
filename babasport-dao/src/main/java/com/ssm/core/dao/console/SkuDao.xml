@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.core.dao.console.SkuDao">
+
+    <!-- 对结果进行映射 并设定结果映射id -->
+    <resultMap type="Sku" id="skuColorResultMap" autoMapping="true">
+        <id column="id" property="id"/>
+
+        <!-- 对子对象（成员对象）进行关联 -->
+        <!-- property:子对象（成员对象）名 -->
+        <!-- javaType:子对象（成员对象）的类名 -->
+        <!-- autoMapping:自动映射子对象（成员对象）的属性-->
+        <association property="color" javaType="Color" autoMapping="true">
+            <id column="cid" property="id"/>
+
+        </association>
+
+    </resultMap>
+    <select id="findAllByProductId"  resultType="SuperPojo">
+                SELECT
+                s.id,
+                s.product_id,
+                s.color_id,
+                s.size,
+                s.market_price,
+                s.price,
+                s.delive_fee,
+                s.stock,
+                s.upper_limit,
+                s.create_time,
+                c.id AS cid,
+                c.`name` AS `colorName`
+                FROM
+                bbs_sku AS s ,
+                bbs_color AS c
+                WHERE
+                s.color_id = c.id AND
+                s.product_id = #{pid}
+
+    </select>
+
+
+</mapper>

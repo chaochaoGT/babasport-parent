@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.core.dao.TestDao">
+    <insert id="add" parameterType="TbUser" >
+
+        INSERT  INTO tb_test (id, name, sex) VALUES (null, #{name}, #{sex})
+
+    </insert>
+
+    <!--&lt;!&ndash; 添加 &ndash;&gt;-->
+    <!--<insert id="add" parameterType="TbUser">-->
+        <!--insert into test_tb-->
+        <!--(id,name,birthday)-->
+        <!--values-->
+        <!--(#{id},#{name},#{sex})-->
+    <!--</insert>-->
+
+</mapper>

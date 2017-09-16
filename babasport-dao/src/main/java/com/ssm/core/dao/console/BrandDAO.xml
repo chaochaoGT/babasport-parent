@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.core.dao.console.BrandDAO">
+    <select id="findAllByExample" parameterType="Brand" resultType="Brand" >
+
+     SELECT
+        bbs_brand.id,
+        bbs_brand.name,
+        bbs_brand.description,
+        bbs_brand.img_url,
+        bbs_brand.web_site,
+        bbs_brand.sort,
+        bbs_brand.is_display
+        FROM bbs_brand
+      <where>
+          <if test="name!=null" >bbs_brand.name LIKE '%' #{name} '%'</if>
+          <if test="isDisplay!=null" > AND bbs_brand.is_display = #{isDisplay}</if>
+      </where>
+    </select>
+
+    <!--根据brandID查询品牌信息-->
+    <select id="findByID"  resultType="Brand" >
+
+     SELECT
+        bbs_brand.id,
+        bbs_brand.name,
+        bbs_brand.description,
+        bbs_brand.img_url,
+        bbs_brand.web_site,
+        bbs_brand.sort,
+        bbs_brand.is_display
+        FROM bbs_brand
+        WHERE  id= #{id}
+    </select>
+
+    <!--修改品牌信息-->
+    <update id="updateBrandById" parameterType="Brand">
+      UPDATE bbs_brand
+        <set>
+            <if test="name!=null" > `name` = #{name},</if>
+            <if test="description!=null" > `description` = #{description},</if>
+            <if test="imgUrl!=null" > `img_url` = #{imgUrl},</if>
+            <if test="sort!=null" > `sort` = #{sort},</if>
+            <if test="isDisplay!=null" > `is_display` = #{isDisplay}</if>
+        </set>
+        WHERE
+            (`id` = #{id});
+    </update>
+
+    <!--批量删除品牌信息-->
+    <delete id="deleteByIds" >
+        DELETE FROM bbs_brand WHERE id IN (${value})
+
+    </delete>
+
+    <!--查询正常可用的所有品牌findUseByExample-->
+    <select id="findUseByExample" resultType="Brand">
+         SELECT
+        bbs_brand.id,
+        bbs_brand.name
+
+        FROM bbs_brand
+        WHERE  is_display= 1
+    </select>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置消息消费方-->
+
+    <bean id="activeMQConnectionFactory"
+          class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL"
+                  value="tcp://192.168.56.102:61616"/>
+        <property name="userName" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="pooledConnectionFactory"
+          class="org.apache.activemq.pool.PooledConnectionFactoryBean">
+        <!--注入工厂连接池-->
+        <property name="connectionFactory"
+                  ref="activeMQConnectionFactory"/>
+    </bean>
+
+    <!--交给sping管理-->
+    <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="pooledConnectionFactory"/>
+    </bean>
+
+    <!--设置监听后的处理类-->
+    <bean id="mqStaticPageListener" class="com.ssm.core.mqlistener.MqStaticPageListener"/>
+
+
+
+    <!--配置监听器-->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+
+        <!--设置spring的mq连接池-->
+        <property name="connectionFactory" ref="singleConnectionFactory"/>
+
+        <!--设置监听的主题名-->
+        <property name="destinationName" value="productIds"/>
+
+        <!--设置监听后的处理类-->
+        <property name="messageListener" ref="mqStaticPageListener"/>
+
+        <!--设置消息类型为主题型-->
+        <property name="pubSubDomain" value="true"/>
+
+
+
+    </bean>
+
+    </beans>
